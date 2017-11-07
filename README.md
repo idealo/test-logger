@@ -4,7 +4,8 @@
  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.idealo.test/test-logger/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.idealo.test/test-logger) 
  
  
- *Goal*
+ **Goal**
+ 
  This is a test utility to swallow logs in tests configurable for each test.
  
  include in your pom
