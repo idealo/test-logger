@@ -3,10 +3,19 @@
 [![Build Status](https://travis-ci.org/idealo/logback-redis.svg?branch=master)](https://travis-ci.org/idealo/test-logger)
  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.idealo.test/test-logger/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.idealo.test/test-logger) 
  
+ include in your pom
+ ```xml
+ <dependency>
+     <groupId>de.idealo.test</groupId>
+     <artifactId>test-logger</artifactId>
+     <version>v0.1</version>
+     <scope>test</scope>
+ </dependency>
+ ```
  
+ simple test
  ```java
- 
-public class SimpleTest {
+ public class SimpleTest {
 
     @Rule
     public TestRule testLogger = TestLoggerRule.silent(); 
