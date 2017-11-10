@@ -33,22 +33,20 @@ public class TestLoggerRule extends ExternalResource {
         restoreLog();
     }
 
-    public static TestLoggerRule silent() {
-        TestLoggerRule testLoggerRule = new TestLoggerRule();
-        testLoggerRule.silenceLog();
-        return testLoggerRule;
+    public void setLevel(Level level) {
+        setLevel(loggerName, level);
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(String loggerName, Level level) {
 
-        if (!logger2LoglevelMap.isEmpty()) {
+        if (logger2LoglevelMap.containsKey(loggerName)) {
             throw new IllegalStateException("this is an usage error, this method is called twice");
         }
 
-        setLevelOfLoggername(level, loggerName);
+        setLevelOfLoggername(loggerName, level);
     }
 
-    private void setLevelOfLoggername(Level level, String loggerName) {
+    private void setLevelOfLoggername(String loggerName, Level level) {
         Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
         if (logger instanceof ch.qos.logback.classic.Logger) {
@@ -90,6 +88,6 @@ public class TestLoggerRule extends ExternalResource {
     }
 
     public void silenceLog(Class clazz) {
-        setLevelOfLoggername(Level.OFF, clazz.getCanonicalName());
+        setLevelOfLoggername(clazz.getCanonicalName(), Level.OFF);
     }
 }
