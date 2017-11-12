@@ -45,7 +45,7 @@ public class TestLoggerRuleFactory {
         @Override
         public TestLoggerRule build() {
             TestLoggerRule testLoggerRule = new TestLoggerRule();
-            levelMap.forEach((key, value) -> testLoggerRule.setLevel(key, value));
+            levelMap.forEach(testLoggerRule::setLevel);
             return testLoggerRule;
         }
     }
