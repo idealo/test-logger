@@ -22,42 +22,42 @@
  ***Swallow all logs***
  ```java
  public class SwallowAllLogsTest {
-    
-    private final Logger log = LoggerFactory.getLogger("test");
-
-    @Rule
-    public TestRule testLogger = TestLoggerRuleFactory.silent(); 
  
-    @Test
-    public void test(){
-       // this will be swallowed
-       log.error("ddd");
-    }
+     private final Logger log = LoggerFactory.getLogger("test");
+ 
+     @Rule
+     public TestRule testLogger = TestLoggerRuleFactory.silent();
+ 
+     @Test
+     public void test(){
+         // this will swallowed
+         log.error("ddd");
+     }
  }
  ```
 
 ***Log only errors***
  ```java
  public class LogOnlyErrorsTest {
-    
-    private final Logger log = LoggerFactory.getLogger("test");
-
-    @Rule
-    public TestRule testLogger = TestLoggerRuleFactory.error(); 
  
-    @Test
-    public void test(){
-       // this will be swallowed
-       log.warn("ddd");
-       //this will be visible
-       log.error("really important log message for test");
-    }
+     private final Logger log = LoggerFactory.getLogger("test");
+ 
+     @Rule
+     public TestRule testLogger = TestLoggerRuleFactory.error();
+ 
+     @Test
+     public void test(){
+         // this will swallowed
+         log.warn("ddd");
+         //this will be visible
+         log.error("really important log message for test");
+     }
  }
  ```
  
  ***Specific level per logger***
  ```java
- public class LevelPerLoggerTest {
+ public class LogLevelPerLoggerTest {
  
      private final Logger log1 = LoggerFactory.getLogger("test1");
      private final Logger log2 = LoggerFactory.getLogger("test2");
@@ -65,7 +65,7 @@
      @Rule
      public TestRule testLogger = TestLoggerRuleFactory
              .withLevel("test1", Level.ERROR)
-             .withLevel("test2", Level.OFF)
+             .silence("test2")
              .build();
  
      @Test
