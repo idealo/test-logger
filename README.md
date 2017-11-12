@@ -77,3 +77,5 @@
      }
  }
  ```
+ 
+ All samples are located in `src/test/java/de/idealo/junit/rules/samples`. Runnable samples.
