@@ -1,90 +1,43 @@
 package de.idealo.junit.rules;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
+import lombok.AccessLevel;
+import lombok.Setter;
 
 public class TestLoggerRule extends ExternalResource {
-    private static final String ROOT = "ROOT";
+    private LoggingBackend loggingBackend = new LoggingBackend() {
+    };
 
-    private final String loggerName;
-    private final Map<String, Integer> logger2LoglevelMap = new HashMap<>();
+    @Setter(AccessLevel.PACKAGE)
+    private Runnable rules = () -> {
+    };
 
-    public TestLoggerRule() {
-        this(ROOT);
-    }
+    @Override
+    protected void before() throws Throwable {
+        Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
-    public TestLoggerRule(String loggername) {
-        loggerName = loggername;
-    }
+        if (logger instanceof ch.qos.logback.classic.Logger) {
+            loggingBackend = new LogbackBackend();
+        } else {
+            throw new IllegalStateException("could not handle logger '" + logger + "'");
+        }
 
-    public TestLoggerRule(Class clazz) {
-        this(clazz.getCanonicalName());
+        rules.run();
     }
 
     @Override
     protected void after() {
-        restoreLog();
+        loggingBackend.restoreLog();
     }
 
-    public void setLevel(Level level) {
-        setLevel(loggerName, level);
+    public void setLevelOfLoggername(String loggerName, org.slf4j.event.Level level) {
+        loggingBackend.setLevelOfLoggername(loggerName, level);
     }
 
-    public void setLevel(String loggerName, Level level) {
-
-        if (logger2LoglevelMap.containsKey(loggerName)) {
-            throw new IllegalStateException("this is an usage error, this method is called twice");
-        }
-
-        setLevelOfLoggername(loggerName, level);
-    }
-
-    private void setLevelOfLoggername(String loggerName, Level level) {
-        Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-
-        if (logger instanceof ch.qos.logback.classic.Logger) {
-            LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-            loggerContext.getLoggerList()
-                         .forEach(log -> {
-                             String name = log.getName();
-                             if (name.equals(loggerName) || loggerName.equals(Logger.ROOT_LOGGER_NAME)) {
-                                 logger2LoglevelMap.put(name, log.getEffectiveLevel().levelInt);
-                                 log.setLevel(level);
-                             }
-                         });
-
-        } else {
-            throw new IllegalStateException("could not handle logger '" + logger + "'");
-        }
-    }
-
-    private void restoreLog() {
-
-        Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-
-        if (logger instanceof ch.qos.logback.classic.Logger) {
-            LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-            logger2LoglevelMap.forEach((name, value) -> {
-                Level oldLevel = Level.toLevel(value);
-                loggerContext.getLogger(name)
-                             .setLevel(oldLevel);
-            });
-            logger2LoglevelMap.clear();
-        } else {
-            throw new IllegalStateException("could not handle logger '" + logger + "'");
-        }
-    }
-
-    public void silenceLog(Class clazz) {
-        setLevelOfLoggername(clazz.getCanonicalName(), Level.OFF);
+    public void silenceLoggername(String loggerName) {
+        loggingBackend.silenceLoggername(loggerName);
     }
 }

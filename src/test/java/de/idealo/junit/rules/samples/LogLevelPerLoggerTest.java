@@ -5,10 +5,9 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import de.idealo.junit.rules.TestLoggerRuleFactory;
-
-import ch.qos.logback.classic.Level;
 
 public class LogLevelPerLoggerTest {
 
@@ -18,7 +17,7 @@ public class LogLevelPerLoggerTest {
     @Rule
     public TestRule testLogger = TestLoggerRuleFactory
             .withLevel("test1", Level.ERROR)
-            .withLevel("test2", Level.OFF)
+            .silence("test2")
             .build();
 
     @Test
