@@ -49,10 +49,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <prerequisites>
-        <maven>3</maven>
-    </prerequisites>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
