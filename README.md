@@ -81,4 +81,5 @@
  All samples are located in [src/test/java/de/idealo/junit/rules/samples](https://github.com/idealo/test-logger/tree/master/src/test/java/de/idealo/junit/rules/samples). Runnable samples.
 
 ***Limitation***
+
 this is implemented for logback only (currently) (open for contributions)
