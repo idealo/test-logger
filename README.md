@@ -6,7 +6,7 @@
  
  **Goal**
  
- This is a test utility to swallow logs in tests configurable for each test.
+ This is a test utility to fine tune log settings in tests configurable for each test.
  
  include in your pom
  ```xml
@@ -17,20 +17,63 @@
      <scope>test</scope>
  </dependency>
  ```
+ **Samples**
  
- simple test
+ ***Swallow all logs***
  ```java
- public class SimpleTest {
-
-    @Rule
-    public TestRule testLogger = TestLoggerRule.silent(); 
+ public class SwallowAllLogsTest {
     
     private final Logger log = LoggerFactory.getLogger("test");
+
+    @Rule
+    public TestRule testLogger = TestLoggerRuleFactory.silent(); 
  
     @Test
     public void test(){
-       // this will swallowed
-       log.error("ddd")
+       // this will be swallowed
+       log.error("ddd");
     }
+ }
+ ```
+
+***Log only errors***
+ ```java
+ public class LogOnlyErrorsTest {
+    
+    private final Logger log = LoggerFactory.getLogger("test");
+
+    @Rule
+    public TestRule testLogger = TestLoggerRuleFactory.error(); 
+ 
+    @Test
+    public void test(){
+       // this will be swallowed
+       log.warn("ddd");
+       //this will be visible
+       log.error("really important log message for test");
+    }
+ }
+ ```
+ 
+ ***Specific level per logger***
+ ```java
+ public class LevelPerLoggerTest {
+ 
+     private final Logger log1 = LoggerFactory.getLogger("test1");
+     private final Logger log2 = LoggerFactory.getLogger("test2");
+ 
+     @Rule
+     public TestRule testLogger = TestLoggerRuleFactory
+             .withLevel("test1", Level.ERROR)
+             .withLevel("test2", Level.OFF)
+             .build();
+ 
+     @Test
+     public void test(){
+         //this will be visible
+         log1.error("really important log message for test");
+         // this will be swallowed
+         log2.error("not important log message for test");
+     }
  }
  ```
