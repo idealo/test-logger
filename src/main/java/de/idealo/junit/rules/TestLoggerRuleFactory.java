@@ -9,7 +9,7 @@ public class TestLoggerRuleFactory {
 
     public static TestLoggerRule silent() {
         TestLoggerRule testLoggerRule = new TestLoggerRule();
-        testLoggerRule.silenceLog();
+        testLoggerRule.setLevel(Level.OFF);
         return testLoggerRule;
     }
 

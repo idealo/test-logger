@@ -21,7 +21,7 @@ public class TestLoggerRule extends ExternalResource {
     }
 
     public TestLoggerRule(String loggername) {
-        this.loggerName = loggername;
+        loggerName = loggername;
     }
 
     public TestLoggerRule(Class clazz) {
@@ -53,21 +53,17 @@ public class TestLoggerRule extends ExternalResource {
             LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
             loggerContext.getLoggerList()
-                    .forEach(log -> {
-                        String name = log.getName();
-                        if (name.equals(loggerName) || loggerName.equals(Logger.ROOT_LOGGER_NAME)) {
-                            logger2LoglevelMap.put(name, log.getEffectiveLevel().levelInt);
-                            log.setLevel(level);
-                        }
-                    });
+                         .forEach(log -> {
+                             String name = log.getName();
+                             if (name.equals(loggerName) || loggerName.equals(Logger.ROOT_LOGGER_NAME)) {
+                                 logger2LoglevelMap.put(name, log.getEffectiveLevel().levelInt);
+                                 log.setLevel(level);
+                             }
+                         });
 
         } else {
             throw new IllegalStateException("could not handle logger '" + logger + "'");
         }
-    }
-
-    public void silenceLog() {
-        setLevel(Level.OFF);
     }
 
     private void restoreLog() {
@@ -79,7 +75,8 @@ public class TestLoggerRule extends ExternalResource {
 
             logger2LoglevelMap.forEach((name, value) -> {
                 Level oldLevel = Level.toLevel(value);
-                loggerContext.getLogger(name).setLevel(oldLevel);
+                loggerContext.getLogger(name)
+                             .setLevel(oldLevel);
             });
             logger2LoglevelMap.clear();
         } else {

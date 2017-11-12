@@ -46,7 +46,7 @@ public class TestLoggerTestRule {
     public void shouldSilence() {
         TestLoggerRule testLoggerRule = new TestLoggerRule(LOGGER_NAME);
 
-        testLoggerRule.silenceLog();
+        testLoggerRule.setLevel(Level.OFF);
         testLogger.info("xxx");
 
         assertThat(appender.getLength()).isZero();
@@ -56,7 +56,7 @@ public class TestLoggerTestRule {
     public void shouldRestore() {
         TestLoggerRule testLoggerRule = new TestLoggerRule(LOGGER_NAME);
 
-        testLoggerRule.silenceLog();
+        testLoggerRule.setLevel(Level.OFF);
         testLogger.error("xxx");
         testLoggerRule.after();
         testLogger.error("yyy");
