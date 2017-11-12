@@ -13,7 +13,7 @@
  <dependency>
      <groupId>de.idealo.test</groupId>
      <artifactId>test-logger</artifactId>
-     <version>v0.1</version>
+     <version>v0.2</version>
      <scope>test</scope>
  </dependency>
  ```
